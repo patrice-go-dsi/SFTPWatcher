@@ -1,0 +1,41 @@
+<!-- 
+######################################################################
+# Windows Service Wrapper configuration
+# Pour script PoworShell C:\Scripts\watcher-sftp.ps1
+#
+# Pour installer le service, dans une console PowerShell : 
+# .\SFTPWatcherService.exe install
+# Il est en autostart.
+# Sinon :
+# .\SFTPWatcherService.exe start
+# Pour l'arrêter, soit via la console services.msc ou bien :
+# .\SFTPWatcherService.exe stop
+# Pour désinstaller le service : 
+# .\SFTPWatcherService.exe uninstall
+# SI modification du script PS1, il suffit de redémarrer le service :
+# .\SFTPWatcherService.exe restart
+###################################################################### -->
+
+<service>
+  <id>SFTPWatcherService</id>
+  <name>SFTP Watcher</name>
+  <description>Surveillance d’un dossier local et transfert SFTP automatique via PowerShell</description>
+
+  <executable>powershell.exe</executable>
+  <arguments>-ExecutionPolicy Bypass -File "C:\Scripts\watcher-sftp.ps1"</arguments>
+
+  <priority>Normal</priority>
+  <stoptimeout>15 sec</stoptimeout>
+  <stopparentprocessfirst>true</stopparentprocessfirst>
+  <startmode>Automatic</startmode>
+  <waithint>15 sec</waithint>
+  <sleeptime>1 sec</sleeptime>
+
+  <logpath>C:\Scripts\Logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>5</keepFiles>
+  </log>
+
+  <onfailure action="restart" delay="10 sec" />
+</service>
